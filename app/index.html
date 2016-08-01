@@ -12,22 +12,46 @@
   <link rel="stylesheet" href="bower_components/angular/angular-csp.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+  <link rel="stylesheet" href="bower_components/foundation-sites/dist/foundation.min.css">
   <link rel="stylesheet" href="css/app.css">
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 <body data-ng-controller="AppCtrl" ng-cloak>
-  <ul class="menu">
-    <li><a href="#!/view1">view1</a></li>
-    <li><a href="#!/view2">view2</a></li>
-  </ul>
-  <h1>{{ app.title }}</h1>
+  <section>
+    <nav>
+      <!-- <div data-sticky-container> -->
+      <div class="title-bar" data-responsive-toggle="responsive-menu" data-hide-for="medium">
+        <button class="menu-icon" type="button" data-toggle></button>
+        <div class="title-bar-title">Menu</div>
+      </div>
+      <div class="top-bar" data-topbar id="responsive-menu">
+        <div class="top-bar-title">{{app.title}} <br/><small>{{app.subtitle}}</small></div>
+        <div class="top-bar-left">
+          <ul class="menu">
+            <li><a href="#!/view1">view1</a></li>
+            <li><a href="#!/view2">view2</a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- </div> -->
+    </nav>
+  </section>
 
-  <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-  <![endif]-->
+  <section>
+    <div class="row">
+      <div class="large-12 column">
+        <h1>{{ app.title }}</h1>
+        <div ng-view></div>
+      </div>
+    </div>
+  </section>
 
-  <div ng-view></div>
 
+
+  <!-- jQuery -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <!-- Foundation -->
+  <script src="bower_components/foundation-sites/dist/foundation.min.js"></script>
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
   -->

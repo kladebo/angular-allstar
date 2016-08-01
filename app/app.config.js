@@ -26,7 +26,7 @@ angular.element(document).ready(function() { // same as $(document).ready(functi
     angular.bootstrap(document, ['myApp']);
 
     // init Foundation
-    //$(document).foundation();
+    $(document).foundation();
 
 
 });
