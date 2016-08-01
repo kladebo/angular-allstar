@@ -1,0 +1,32 @@
+<form>
+	<div class="row">
+		<div class="large-2 column">
+			<label for="search" class="text-right middle">filter the teams</label>
+		</div>
+		<div class="large-4 column">
+			<input type="text" id="search" data-ng-model="search" placeholder="filter with">
+		</div>
+		<div class="large-2 column">
+			<label for="result" class="text-right middle">results</label>
+		</div>
+		<div class="large-4 column">
+			<select id="result" ng-model="$ctrl.resultAmount" ng-options="x for x in $ctrl.resultAmountArr"></select>
+		</div>
+	</div>
+</form>
+<table border="1">
+	<caption>teams {{ ($ctrl.data.players | filter:search).length }} out of {{ $ctrl.data.players.length }}</caption>
+	<thead>
+		<tr>
+			<th></th>
+			<th ng-repeat="x in $ctrl.data.headers" ng-click="$ctrl.orderTable(x.id);">{{ x.value }}</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<tr ng-repeat="x in $ctrl.data.players | orderBy : $ctrl.order : $ctrl.orderReverse | filter:search | limitTo:$ctrl.resultAmount">
+			<td>{{ $index + 1 }}</td>
+			<td ng-repeat="y in $ctrl.data.headers">{{ x[y.id] }}</td>
+		</tr>
+	</tbody>
+</table>

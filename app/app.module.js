@@ -4,5 +4,6 @@
 angular.module('myApp', [
     'ngRoute',
     'view1',
-    'view2'
+    'view2',
+    'allstar.list'
     ]);
