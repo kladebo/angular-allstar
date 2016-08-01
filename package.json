@@ -1,9 +1,9 @@
 {
-  "name": "angular-seed",
+  "name": "angular-allstar",
   "private": true,
   "version": "0.0.0",
-  "description": "A starter project for AngularJS",
-  "repository": "https://github.com/angular/angular-seed",
+  "description": "project Allstar",
+  "repository": "",
   "license": "MIT",
   "devDependencies": {
     "bower": "^1.7.7",
