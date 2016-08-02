@@ -6,5 +6,6 @@ angular.module('myApp', [
     'view1',
     'view2',
     'core',
+    'gui',
     'allstar.list'
     ]);

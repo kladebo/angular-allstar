@@ -12,6 +12,8 @@ angular.module('allstar.list')
 		self.form = {};
 		self.form.query = '';
 		self.form.year = '';
+		self.form.team = '';
+		self.form.lg = '';
 		self.order = 'a';
 		self.orderReverse = false;
 		self.resultAmountArr = [5,10,25,50,100,1000];
@@ -23,6 +25,8 @@ angular.module('allstar.list')
 			self.filtered_players = fsearchFilter(self.players, 'a', '');
 			self.headers = response.headers;
 			self.year = makeUnique(self.players, 'b');
+			self.team = makeUnique(self.players, 'e');
+			self.lg = makeUnique(self.players, 'f');
 		});
 
 		self.orderTable = function (item) {
@@ -39,6 +43,8 @@ angular.module('allstar.list')
 			
 			self.filtered_players = fsearchFilter(self.players, 'a', self.form.query || '');
 			self.filtered_players = fsearchFilter(self.filtered_players, 'b', self.form.year || '');
+			self.filtered_players = fsearchFilter(self.filtered_players, 'e', self.form.team || '');
+			self.filtered_players = fsearchFilter(self.filtered_players, 'f', self.form.lg || '');
 
 		};
 
