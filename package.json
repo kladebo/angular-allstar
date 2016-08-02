@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "description": "project Allstar",
-  "repository": "",
+  "repository": "git@github.com:kladebo/angular-allstar.git",
   "license": "MIT",
   "devDependencies": {
     "bower": "^1.7.7",

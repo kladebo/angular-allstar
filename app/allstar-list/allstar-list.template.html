@@ -1,36 +1,51 @@
-<!-- <table border="1">
-			<caption>teams {{ ($ctrl.data.players).length }} out of {{ $ctrl.data.players.length }}</caption>
-			<thead>
-						<tr>
-									<th></th>
-									<th ng-repeat="x in $ctrl.data.headers" ng-click="$ctrl.orderTable(x.id);">{{ x.value }}</th>
-						</tr>
-			</thead>
-			<tbody>
-						<tr ng-repeat="x in $ctrl.data.players | fsearch:'a':$ctrl.form.query | fsearch:'b':$ctrl.form.year | orderBy : $ctrl.order : $ctrl.orderReverse | limitTo:$ctrl.resultAmount">
-									<td>{{ $index + 1 }}</td>
-									<td ng-repeat="y in $ctrl.data.headers" ng-class="[]">{{ x[y.id] }}</td>
-						</tr>
-			</tbody>
+<!--
+<table border="1">
+	<caption>teams {{ ($ctrl.data.players).length }} out of {{ $ctrl.data.players.length }}</caption>
+	<thead>
+		<tr>
+			<th></th>
+			<th ng-repeat="x in $ctrl.data.headers" ng-click="$ctrl.orderTable(x.id);">{{ x.value }}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="x in $ctrl.data.players | fsearch:'a':$ctrl.form.query | fsearch:'b':$ctrl.form.year | orderBy : $ctrl.order : $ctrl.orderReverse | limitTo:$ctrl.resultAmount">
+			<td>{{ $index + 1 }}</td>
+			<td ng-repeat="y in $ctrl.data.headers" ng-class="[]">{{ x[y.id] }}</td>
+		</tr>
+	</tbody>
 </table>
-<hr> -->
+<hr>
+-->
 <div class="row">
 	<div class="large-3 column">
 		<form>
 			<fieldset>
 				<legend>filters:</legend>
 				<label for="search" class="">playerID
-					<input type="text" id="search" data-ng-model="$ctrl.form.query" placeholder="playerID" ng-change="$ctrl.filter();">
+					<input type="text" id="playerID" data-ng-model="$ctrl.form.a" placeholder="playerID" ng-change="$ctrl.filter();">
 				</label>
 				<label for="year" class="">yearID
-					<select id="year" ng-model="$ctrl.form.year" ng-options="x for x in $ctrl.year | orderBy:x:true" ng-change="$ctrl.filter();"><option value="">yearID</option></select>
+					<select id="year" ng-model="$ctrl.form.b" ng-options="x for x in $ctrl.b_list | orderBy:x:true" ng-change="$ctrl.filter();"><option value=""></option></select>
+				</label>
+				<fieldset>
+					<legend>gameNum</legend>
+					<span ng-repeat="x in $ctrl.c_list">
+						<input type="checkbox" name="c" id="check{{x}}" value="{{x}}" ng-model="$ctrl.form.c[x]" ng-change="$ctrl.check($ctrl.form.c, 'c_active');"><label for="check{{x}}">{{x}}</label>
+					</span>
+				</fieldset>
+				<label for="search" class="">gameID
+					<input type="text" id="gameID" data-ng-model="$ctrl.form.d" placeholder="gameID" ng-change="$ctrl.filter();">
 				</label>
 				<label for="team" class="">teamID
-					<select id="team" ng-model="$ctrl.form.team" ng-options="x for x in $ctrl.team | orderBy:x:false" ng-change="$ctrl.filter();"><option value="">teamID</option></select>
+					<select id="team" ng-model="$ctrl.form.team" ng-options="x for x in $ctrl.team | orderBy:x:false" ng-change="$ctrl.filter();"><option value=""></option></select>
 				</label>
-				<label ng-repeat="x in $ctrl.lg" for="radio{{x}}">
-					<input type="radio" name="lg" id="radio{{x}}" value="{{x}}" ng-model="$ctrl.form.lg" ng-click="$ctrl.filter();">{{x}}
-				</label>
+				<fieldset>
+					<legend>lgID</legend>
+					<input type="radio" name="lg" id="radionone" value="" ng-model="$ctrl.form.lg" ng-click="$ctrl.filter();"><label for="radionone">None</label>
+					<span ng-repeat="x in $ctrl.lg">
+						<input type="radio" name="lg" id="radio{{x}}" value="{{x}}" ng-model="$ctrl.form.lg" ng-click="$ctrl.filter();"><label for="radio{{x}}">{{x}}</label>
+					</span>
+				</fieldset>
 				
 			</fieldset>
 		</form>
@@ -39,29 +54,29 @@
 		<div>
 			<form>
 				<label for="result" class="text-right middle">results
-					<select id="result" ng-model="$ctrl.resultAmount" ng-options="x for x in $ctrl.resultAmountArr"></select>
-				</label>
-			</form>
-		</div>
-		<table border="1">
-			<caption>teams {{ ($ctrl.filtered_players).length }} out of {{ $ctrl.data.players.length }}</caption>
-			<thead>
-				<tr>
-					<th></th>
-					<th ng-repeat="x in $ctrl.headers" ng-click="$ctrl.orderTable(x.id);">{{ x.value }}</th>
-				</tr>
-			</thead>
-			<tbody >
-				<tr ng-repeat="x in $ctrl.filtered_players | orderBy : $ctrl.order : $ctrl.orderReverse | limitTo:$ctrl.resultAmount">
-					<td>{{ $index + 1 }}</td>
-					<td ng-repeat="y in $ctrl.headers" ng-class="[]">{{ x[y.id] }}</td>
-				</tr>
-			</tbody>
-			<tbody ng-show="$ctrl.filtered_players.length === 0">
-				<tr>
-					<td colspan="{{$ctrl.headers.length+1}}"> no teams found {{$ctrl.headers.length}}</td>
-				</tr>
-			</tbody>
-		</table>
+				<select id="result" ng-model="$ctrl.resultAmount" ng-options="x for x in $ctrl.resultAmountArr"></select>
+			</label>
+		</form>
 	</div>
+	<table border="1">
+		<caption>teams {{ ($ctrl.filtered_players).length }} out of {{ $ctrl.data.players.length }}</caption>
+		<thead>
+			<tr>
+				<th></th>
+				<th ng-repeat="x in $ctrl.headers" ng-click="$ctrl.orderTable(x.id);">{{ x.value }}</th>
+			</tr>
+		</thead>
+		<tbody >
+			<tr ng-repeat="x in $ctrl.filtered_players | orderBy : $ctrl.order : $ctrl.orderReverse | limitTo:$ctrl.resultAmount">
+				<td>{{ $index + 1 }}</td>
+				<td ng-repeat="y in $ctrl.headers" ng-class="[]">{{ x[y.id] }}</td>
+			</tr>
+		</tbody>
+		<tbody ng-show="$ctrl.filtered_players.length === 0">
+			<tr>
+				<td colspan="{{$ctrl.headers.length+1}}" class="text-center"> No teams were found...</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 </div>

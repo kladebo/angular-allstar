@@ -10,9 +10,11 @@ angular.module('allstar.list')
 		var self = this;
 		
 		self.form = {};
-		self.form.query = '';
-		self.form.year = '';
+		self.form.a = '';
+		self.form.b = '';
 		self.form.team = '';
+		self.form.c_active = '';
+		self.form.d = '';
 		self.form.lg = '';
 		self.order = 'a';
 		self.orderReverse = false;
@@ -24,8 +26,9 @@ angular.module('allstar.list')
 			self.players = response.players;
 			self.filtered_players = fsearchFilter(self.players, 'a', '');
 			self.headers = response.headers;
-			self.year = makeUnique(self.players, 'b');
+			self.b_list = makeUnique(self.players, 'b');
 			self.team = makeUnique(self.players, 'e');
+			self.c_list = makeUnique(self.players, 'c');
 			self.lg = makeUnique(self.players, 'f');
 		});
 
@@ -39,12 +42,29 @@ angular.module('allstar.list')
 			}
 		};
 
+		self.check = function (item, klaas) {
+			//console.log(item);
+			var t = [];
+			for(var i in item){
+				if(item.hasOwnProperty(i)){
+					if(item[i] === true){
+						t.push(i);
+					}
+				}
+			}
+			self.form[klaas] = t.length ? t : '';
+			self.filter();
+		};
+
 		self.filter = function (){
 			
-			self.filtered_players = fsearchFilter(self.players, 'a', self.form.query || '');
-			self.filtered_players = fsearchFilter(self.filtered_players, 'b', self.form.year || '');
+			self.filtered_players = fsearchFilter(self.players, 'a', self.form.a || '');
+			self.filtered_players = fsearchFilter(self.filtered_players, 'b', self.form.b || '');
+			self.filtered_players = fsearchFilter(self.filtered_players, 'c', self.form.c_active || '');
+			self.filtered_players = fsearchFilter(self.filtered_players, 'd', self.form.d || '');
 			self.filtered_players = fsearchFilter(self.filtered_players, 'e', self.form.team || '');
 			self.filtered_players = fsearchFilter(self.filtered_players, 'f', self.form.lg || '');
+			
 
 		};
 

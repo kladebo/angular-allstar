@@ -3,19 +3,23 @@
 angular.module('core')
 
 .filter('fsearch', function() {
-	return function(input, field, value) {
-		//console.log(input, field, value);
-		var d = [], f;
-		if(!value){
-			value = '';
-		}
-		angular.forEach(input, function(item, index, parent){
-			f = item[field].toString();
+	return function(items, field, value) {
+		//console.log(items, field, value);
+		//console.log(value, typeof value);
+		var filteredItems = [], fieldvalue, testvalue;
+
+		angular.forEach(items, function(item, index, parent){
+			fieldvalue = item[field].toString();
 			
-			if(f.indexOf(value) >= 0){
-				d.push(item);
+			if(typeof value === 'object'){
+				testvalue = ','+value.join(',')+',';
+				if(testvalue.indexOf(','+fieldvalue+',') >= 0){
+					filteredItems.push(item);
+				}
+			}else if(fieldvalue.indexOf(value) >= 0){
+				filteredItems.push(item);
 			}
 		});
-		return d;
+		return filteredItems;
 	};
 });
