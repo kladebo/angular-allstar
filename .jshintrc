@@ -1,5 +1,12 @@
 {
   "strict": "global",
+  "undef": true,
+  "unused": true,
+  "notypeof": true,
+  "forin": true,
+  "eqeqeq": true,
+  "curly": true,
+  "freeze": true,
   "globals": {
     // Angular
     "angular": false,
@@ -19,6 +26,11 @@
     // Protractor
     "browser": false,
     "element": false,
-    "by": false
+    "by": false,
+
+    // Browser
+    "console": false,
+    "document": false,
+    "$": false
   }
 }

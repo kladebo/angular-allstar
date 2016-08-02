@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('allstar.list', []);
+angular.module('allstar.list', ['core.allstar']);
