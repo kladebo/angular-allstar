@@ -8,10 +8,16 @@ angular.module('core')
 		//console.log(value, typeof value);
 		var filteredItems = [], fieldvalue, testvalue;
 
+		if(value === null){
+			value = '';
+		}
+
+
 		angular.forEach(items, function(item, index, parent){
-			fieldvalue = item[field].toString();
+
+			fieldvalue = angular.isUndefined(item[field]) ? 'blank' : item[field].toString();
 			
-			if(typeof value === 'object'){
+			if(angular.isObject(value)){
 				testvalue = ','+value.join(',')+',';
 				if(testvalue.indexOf(','+fieldvalue+',') >= 0){
 					filteredItems.push(item);

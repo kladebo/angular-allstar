@@ -9,13 +9,17 @@ angular.module('allstar.list')
 	function allstarListCtrl(Allstar, fsearchFilter) {
 		var self = this;
 		
-		self.form = {};
-		self.form.a = '';
-		self.form.b = '';
-		self.form.team = '';
-		self.form.c_active = '';
-		self.form.d = '';
-		self.form.lg = '';
+		self.form = {
+			'a' : '',
+			'b' : '',
+			'c' : '',
+			'd' : '',
+			'e' : '',
+			'f' : '',
+			'g' : '',
+			'h' : ''
+		};
+		self.initform = angular.copy(self.form);
 		self.order = 'a';
 		self.orderReverse = false;
 		self.resultAmountArr = [5,10,25,50,100,1000];
@@ -27,9 +31,12 @@ angular.module('allstar.list')
 			self.filtered_players = fsearchFilter(self.players, 'a', '');
 			self.headers = response.headers;
 			self.b_list = makeUnique(self.players, 'b');
-			self.team = makeUnique(self.players, 'e');
 			self.c_list = makeUnique(self.players, 'c');
-			self.lg = makeUnique(self.players, 'f');
+			self.e_list = makeUnique(self.players, 'e');
+			self.f_list = makeUnique(self.players, 'f');
+			self.g_list = makeUnique(self.players, 'g');
+			self.h_list = makeUnique(self.players, 'h');
+			console.log(self);
 		});
 
 		self.orderTable = function (item) {
@@ -42,8 +49,8 @@ angular.module('allstar.list')
 			}
 		};
 
-		self.check = function (item, klaas) {
-			//console.log(item);
+		self.check = function (item, field) {
+			//console.log(item, field);
 			var t = [];
 			for(var i in item){
 				if(item.hasOwnProperty(i)){
@@ -52,34 +59,53 @@ angular.module('allstar.list')
 					}
 				}
 			}
-			self.form[klaas] = t.length ? t : '';
+			self.form[field] = t.length ? t : '';
 			self.filter();
 		};
 
-		self.filter = function (){
-			
-			self.filtered_players = fsearchFilter(self.players, 'a', self.form.a || '');
-			self.filtered_players = fsearchFilter(self.filtered_players, 'b', self.form.b || '');
-			self.filtered_players = fsearchFilter(self.filtered_players, 'c', self.form.c_active || '');
-			self.filtered_players = fsearchFilter(self.filtered_players, 'd', self.form.d || '');
-			self.filtered_players = fsearchFilter(self.filtered_players, 'e', self.form.team || '');
-			self.filtered_players = fsearchFilter(self.filtered_players, 'f', self.form.lg || '');
-			
+		self.filter = function () {
 
+			//self.filtered_players = angular.copy(self.players);
+			
+			self.filtered_players = fsearchFilter(self.players, 'a', self.form.a);
+			self.filtered_players = fsearchFilter(self.filtered_players, 'b', self.form.b);
+			self.filtered_players = fsearchFilter(self.filtered_players, 'c', self.form.c);
+			self.filtered_players = fsearchFilter(self.filtered_players, 'd', self.form.d);
+			self.filtered_players = fsearchFilter(self.filtered_players, 'e', self.form.e);
+			self.filtered_players = fsearchFilter(self.filtered_players, 'f', self.form.f);
+			self.filtered_players = fsearchFilter(self.filtered_players, 'g', self.form.g);
+			self.filtered_players = fsearchFilter(self.filtered_players, 'h', self.form.h);
+			
+			//console.log(self);
+		};
+
+		self.reset = function(whichform){
+			self.form = self.initform;
+			self.filtered_players = angular.copy(self.players);
+
+			// special angular resetters for form elements
+			whichform.$setUntouched();
+			whichform.$setPristine();
 		};
 
 		function makeUnique(list, field){
 
-			//console.log(list);
-
 			var unique = list.map(function (item) {
 				return item[field];
-			}).filter(function(item,i,a){
-				//console.log(item,i,a);
-				return i === a.indexOf(item);
+			}).filter(function (item, index, a) {
+				//console.log(item, index , a);
+				return index === a.indexOf(item);
 			});
 
-			//console.log(unique);
+
+			// reset value 'undefined' to 'blank'...
+			// search.filter uses this value also...
+			angular.forEach(unique, function(item, index){
+				if(angular.isUndefined(item)){
+					unique[index] = 'blank';
+				}
+			});
+
 			return unique;
 		}
 
