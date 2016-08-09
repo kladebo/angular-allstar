@@ -28,7 +28,7 @@
 			<fieldset>
 				<legend>gameNum</legend>
 				<span ng-repeat="x in $ctrl.c_list">
-					<input type="checkbox" name="c" id="check{{x}}" value="{{x}}" ng-model="$ctrl.form.c_multi[x]" ng-change="$ctrl.checkboxFilter($ctrl.form.c_multi, 'c');"><label for="check{{x}}">{{x}}</label>
+					<input type="checkbox" name="c" id="check_gameNum{{x}}" value="{{x}}" ng-model="$ctrl.form.c[x]" ng-change="$ctrl.filter();"><label for="check{{x}}">{{x}}</label>
 				</span>
 			</fieldset>
 			<label for="d" class="">gameID
@@ -58,7 +58,7 @@
 			<button type="reset" ng-click="$ctrl.resetFilters(teamfilter);" ng-disabled="teamfilter.$pristine" class="button">Reset</button>
 		</form>
 		
-		<allstar-selection-list selection="$ctrl.selectedPlayers" on-update="$ctrl.clearSelectedPlayers($event)"></allstar-selection-list>
+		<allstar-selection-list selection="$ctrl.selected_players" on-update="$ctrl.clearSelectedPlayers($event)"></allstar-selection-list>
 
 	</div>
 	<div class="large-9 column">

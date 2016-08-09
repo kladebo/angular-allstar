@@ -25,6 +25,10 @@ angular.module('allstar.list')
 		self.resultAmountArr = [5,10,25,50,100,1000];
 		self.resultAmount = self.resultAmountArr[1];
 
+
+		self.players = '';
+		self.filtered_players = '';
+
 		Allstar.query(function (response) {
 			//self.data = response;
 			self.players = response.players;
@@ -32,8 +36,8 @@ angular.module('allstar.list')
 				player.id = index;
 			});
 
-			self.initial_players = angular.copy(self.players);
-			self.filtered_players = fsearchFilter(self.players, 'a', '');
+			//self.initial_players = angular.copy(self.players);
+			//self.filtered_players = fsearchFilter(self.players, 'a', '');
 			self.headers = response.headers;
 			self.b_list = makeUnique(self.players, 'b');
 			self.c_list = makeUnique(self.players, 'c');
@@ -42,6 +46,8 @@ angular.module('allstar.list')
 			self.g_list = makeUnique(self.players, 'g');
 			self.h_list = makeUnique(self.players, 'h');
 			// console.log(self);
+
+			self.filter();
 		});
 
 		self.orderTable = function (item) {
@@ -57,46 +63,31 @@ angular.module('allstar.list')
 
 
 		/*
-		 *	Checkboxes are multi-valued so use a array for the values
-		 *	filterarray: the array to hold the values
-		 *	filterfield: the field to be used for the filter 
-		 */
-
-		self.checkboxFilter = function (filterarray, filterfield) {
-			//console.log(item, filterfield);
-			var t = [];
-			for(var i in filterarray){
-				if(filterarray.hasOwnProperty(i)){
-					if(filterarray[i] === true){
-						t.push(i);
-					}
-				}
-			}
-			self.form[filterfield] = t.length ? t : '';
-			self.filter();
-		};
-
-
-		/*
 		 *	Filters the dataset with the input from the form
 		 */
 
 		self.filter = function () {
+			var list;
 
-			//self.filtered_players = angular.copy(self.players);
-			self.filtered_players = self.players;
-			
-			//self.filtered_players = fsearchFilter(self.players, 'a', self.form.a);
-			self.filtered_players = fsearchFilter(self.filtered_players, 'a', self.form.a);
-			self.filtered_players = fsearchFilter(self.filtered_players, 'b', self.form.b);
-			self.filtered_players = fsearchFilter(self.filtered_players, 'c', self.form.c);
-			self.filtered_players = fsearchFilter(self.filtered_players, 'd', self.form.d);
-			self.filtered_players = fsearchFilter(self.filtered_players, 'e', self.form.e);
-			self.filtered_players = fsearchFilter(self.filtered_players, 'f', self.form.f);
-			self.filtered_players = fsearchFilter(self.filtered_players, 'g', self.form.g);
-			self.filtered_players = fsearchFilter(self.filtered_players, 'h', self.form.h);
-			
-			//console.log(self);
+			// copy a fresh list
+			self.filtered_players = angular.copy(self.players);
+
+			// reset selected propperty on list
+			list = self.selected_players;
+			for(var i=0, j=list.length; i<j; i+=1){
+				self.filtered_players[self.selected_players[i].id] = list[i];
+
+			}
+
+			// filter the items when filter has a value
+			list = self.form;
+			for(i in list){
+				if(list.hasOwnProperty(i)){
+					if(list[i] !== ''){
+						self.filtered_players = fsearchFilter(self.filtered_players, i, list[i]);
+					}
+				}
+			}
 		};
 
 		/*
@@ -107,11 +98,12 @@ angular.module('allstar.list')
 		self.resetFilters = function(whichform){
 			console.log('clearing:',whichform);
 			self.form = angular.copy(self.initform);
-			//self.filtered_players = angular.copy(self.players);
 
 			// special angular resetters for form elements
 			whichform.$setUntouched();
 			whichform.$setPristine();
+
+			// start blank
 			self.filter();
 		};
 
@@ -121,12 +113,12 @@ angular.module('allstar.list')
 		 *	toggle players on a selected list
 		 */
 
-		self.selectedPlayers = [];
+		self.selected_players = [];
 		self.selectPlayer = function(arg){
 			var playerindex = false;
 
-			for(var i=0, j=self.selectedPlayers.length; i<j; i+=1){
-				if(self.selectedPlayers[i].id === arg.id){
+			for(var i=0, j=self.selected_players.length; i<j; i+=1){
+				if(self.selected_players[i].id === arg.id){
 					playerindex = i;
 					break;
 				}
@@ -134,19 +126,19 @@ angular.module('allstar.list')
 
 			if(playerindex === false){
 				arg.selected = true;
-				self.selectedPlayers.push(arg);
+				self.selected_players.push(arg);
 
 			}else{
 				arg.selected = false;
-				self.selectedPlayers.splice(playerindex,1);
+				self.selected_players.splice(playerindex,1);
 			}
-			console.log('selectedPlayers: ',self.selectedPlayers);
+			console.log('selected_players: ',self.selected_players);
 		};
 
 
 		self.clearSelectedPlayers = function (event) {
 			console.log('event:',event);
-			//self.selectedPlayers = [];
+			//self.selected_players = [];
 			var players = event.selection;
 			//for(var i=0, j=players.length; i<j; i+=1){
 				var i = 0;
