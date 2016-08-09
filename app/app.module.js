@@ -7,5 +7,6 @@ angular.module('myApp', [
     'view2',
     'core',
     'gui',
-    'allstar.list'
+    'allstar.list',
+    'allstar.selection'
     ]);

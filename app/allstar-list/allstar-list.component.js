@@ -26,8 +26,13 @@ angular.module('allstar.list')
 		self.resultAmount = self.resultAmountArr[1];
 
 		Allstar.query(function (response) {
-			self.data = response;
+			//self.data = response;
 			self.players = response.players;
+			angular.forEach(self.players, function(player, index){
+				player.id = index;
+			});
+
+			self.initial_players = angular.copy(self.players);
 			self.filtered_players = fsearchFilter(self.players, 'a', '');
 			self.headers = response.headers;
 			self.b_list = makeUnique(self.players, 'b');
@@ -36,7 +41,7 @@ angular.module('allstar.list')
 			self.f_list = makeUnique(self.players, 'f');
 			self.g_list = makeUnique(self.players, 'g');
 			self.h_list = makeUnique(self.players, 'h');
-			console.log(self);
+			// console.log(self);
 		});
 
 		self.orderTable = function (item) {
@@ -66,8 +71,10 @@ angular.module('allstar.list')
 		self.filter = function () {
 
 			//self.filtered_players = angular.copy(self.players);
+			self.filtered_players = self.players;
 			
-			self.filtered_players = fsearchFilter(self.players, 'a', self.form.a);
+			//self.filtered_players = fsearchFilter(self.players, 'a', self.form.a);
+			self.filtered_players = fsearchFilter(self.filtered_players, 'a', self.form.a);
 			self.filtered_players = fsearchFilter(self.filtered_players, 'b', self.form.b);
 			self.filtered_players = fsearchFilter(self.filtered_players, 'c', self.form.c);
 			self.filtered_players = fsearchFilter(self.filtered_players, 'd', self.form.d);
@@ -86,6 +93,29 @@ angular.module('allstar.list')
 			// special angular resetters for form elements
 			whichform.$setUntouched();
 			whichform.$setPristine();
+		};
+
+		self.selectedPlayers = [];
+		self.rowclicked = function(arg){
+			var playerindex = false;
+			arg.selected = !arg.selected;
+
+
+			for(var i=0, j=self.selectedPlayers.length; i<j; i+=1){
+				if(self.selectedPlayers[i].id === arg.id){
+					playerindex = i;
+					break;
+				}
+			}
+
+			if(playerindex === false){
+				//console.log('notfound');
+				self.selectedPlayers.push(arg);
+			}else{
+				//console.info('found do');
+				self.selectedPlayers.splice(playerindex,1);
+			}
+			console.log('selectedPlayers after: ',self.selectedPlayers);
 		};
 
 		function makeUnique(list, field){

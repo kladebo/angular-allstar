@@ -7,3 +7,9 @@
 .warning{
 	color: red;
 }
+.inline{
+	display: inline;
+	input[type=checkbox]{
+		margin-bottom: 0;
+	}
+}
