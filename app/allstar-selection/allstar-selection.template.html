@@ -1,4 +1,9 @@
-allstar-selection.html
-<ul>
-	<li ng-repeat="selected in $ctrl.selectedPlayers">{{ selected.id }}</li>
-</ul>
+
+<div ng-show="$ctrl.selection.length">
+	<h4>Allstar selection:</h4>
+	<button class="button" ng-click="$ctrl.onUpdate({$event: {selection:$ctrl.selection}})">clear all</button>
+	<!-- <button class="button" ng-click="$ctrl.clearall()">clear all2</button> -->
+	<ul>
+		<li ng-repeat="item in $ctrl.selection">{{ item.a }} {{ item.id }}</li>
+	</ul>
+</div>

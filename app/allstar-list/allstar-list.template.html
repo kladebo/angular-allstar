@@ -28,7 +28,7 @@
 			<fieldset>
 				<legend>gameNum</legend>
 				<span ng-repeat="x in $ctrl.c_list">
-					<input type="checkbox" name="c" id="check{{x}}" value="{{x}}" ng-model="$ctrl.form.c_multi[x]" ng-change="$ctrl.check($ctrl.form.c_multi, 'c');"><label for="check{{x}}">{{x}}</label>
+					<input type="checkbox" name="c" id="check{{x}}" value="{{x}}" ng-model="$ctrl.form.c_multi[x]" ng-change="$ctrl.checkboxFilter($ctrl.form.c_multi, 'c');"><label for="check{{x}}">{{x}}</label>
 				</span>
 			</fieldset>
 			<label for="d" class="">gameID
@@ -55,10 +55,11 @@
 				<select id="h" ng-model="$ctrl.form.h" ng-options="x for x in $ctrl.h_list | orderBy:x:false" ng-change="$ctrl.filter();"><option value=""></option></select>
 			</label>
 
-			<button type="reset" ng-click="$ctrl.reset(teamfilter);" ng-disabled="teamfilter.$pristine" class="button">Reset</button>
+			<button type="reset" ng-click="$ctrl.resetFilters(teamfilter);" ng-disabled="teamfilter.$pristine" class="button">Reset</button>
 		</form>
+		
+		<allstar-selection-list selection="$ctrl.selectedPlayers" on-update="$ctrl.clearSelectedPlayers($event)"></allstar-selection-list>
 
-		<allstar-selection-list></allstar-selection-list>
 	</div>
 	<div class="large-9 column">
 		<form>
@@ -67,7 +68,7 @@
 			</label>
 		</form>
 		<table border="1">
-			<caption>teams {{ ($ctrl.filtered_players).length }} out of {{ $ctrl.data.players.length }}</caption>
+			<caption>teams {{ ($ctrl.filtered_players).length }} out of {{ $ctrl.players.length }}</caption>
 			<thead>
 				<tr>
 					<th></th>
@@ -75,10 +76,10 @@
 				</tr>
 			</thead>
 			<tbody >
-				<tr ng-repeat="x in $ctrl.filtered_players | orderBy : $ctrl.order : $ctrl.orderReverse | limitTo:$ctrl.resultAmount" ng-click="$ctrl.rowclicked(x);" ng-class="{warning:x.selected}">
-					<td>{{ $index + 1 }} 
+				<tr ng-repeat="x in $ctrl.filtered_players | orderBy : $ctrl.order : $ctrl.orderReverse | limitTo:$ctrl.resultAmount" ng-click="$ctrl.selectPlayer(x);" ng-class="{warning:x.selected}">
+					<td>{{ $index + 1 }}/{{ x.id }} 
 						<form class="inline">
-							<input type="checkbox" ng-model="x.selected" ng-click="">
+							<input type="checkbox" ng-model="x.selected" onmousedown="event.preventDefault();">
 						</form>
 					</td>
 					<td ng-repeat="y in $ctrl.headers" ng-class="[]">{{ x[y.id] }}</td>

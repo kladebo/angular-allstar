@@ -54,19 +54,32 @@ angular.module('allstar.list')
 			}
 		};
 
-		self.check = function (item, field) {
-			//console.log(item, field);
+
+
+		/*
+		 *	Checkboxes are multi-valued so use a array for the values
+		 *	filterarray: the array to hold the values
+		 *	filterfield: the field to be used for the filter 
+		 */
+
+		self.checkboxFilter = function (filterarray, filterfield) {
+			//console.log(item, filterfield);
 			var t = [];
-			for(var i in item){
-				if(item.hasOwnProperty(i)){
-					if(item[i] === true){
+			for(var i in filterarray){
+				if(filterarray.hasOwnProperty(i)){
+					if(filterarray[i] === true){
 						t.push(i);
 					}
 				}
 			}
-			self.form[field] = t.length ? t : '';
+			self.form[filterfield] = t.length ? t : '';
 			self.filter();
 		};
+
+
+		/*
+		 *	Filters the dataset with the input from the form
+		 */
 
 		self.filter = function () {
 
@@ -86,20 +99,31 @@ angular.module('allstar.list')
 			//console.log(self);
 		};
 
-		self.reset = function(whichform){
-			self.form = self.initform;
-			self.filtered_players = angular.copy(self.players);
+		/*
+		 *	resets the form completely
+		 *	whichform: the name of the form to reset
+		 */
+
+		self.resetFilters = function(whichform){
+			console.log('clearing:',whichform);
+			self.form = angular.copy(self.initform);
+			//self.filtered_players = angular.copy(self.players);
 
 			// special angular resetters for form elements
 			whichform.$setUntouched();
 			whichform.$setPristine();
+			self.filter();
 		};
 
-		self.selectedPlayers = [];
-		self.rowclicked = function(arg){
-			var playerindex = false;
-			arg.selected = !arg.selected;
 
+
+		/*
+		 *	toggle players on a selected list
+		 */
+
+		self.selectedPlayers = [];
+		self.selectPlayer = function(arg){
+			var playerindex = false;
 
 			for(var i=0, j=self.selectedPlayers.length; i<j; i+=1){
 				if(self.selectedPlayers[i].id === arg.id){
@@ -109,14 +133,36 @@ angular.module('allstar.list')
 			}
 
 			if(playerindex === false){
-				//console.log('notfound');
+				arg.selected = true;
 				self.selectedPlayers.push(arg);
+
 			}else{
-				//console.info('found do');
+				arg.selected = false;
 				self.selectedPlayers.splice(playerindex,1);
 			}
-			console.log('selectedPlayers after: ',self.selectedPlayers);
+			console.log('selectedPlayers: ',self.selectedPlayers);
 		};
+
+
+		self.clearSelectedPlayers = function (event) {
+			console.log('event:',event);
+			//self.selectedPlayers = [];
+			var players = event.selection;
+			//for(var i=0, j=players.length; i<j; i+=1){
+				var i = 0;
+			while(players.length > 0){
+				console.log('player: ',players[i]);
+				self.selectPlayer(players[i]);
+			}
+		};
+
+
+
+		/*
+		 *	makes a unique array from a multivalue list
+		 *	list: the list to use
+		 *	field: the field to filter the list with
+		 */
 
 		function makeUnique(list, field){
 
